@@ -7,7 +7,7 @@ package com.ashleythew.aut.paper.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Semester {
+public class Semester{
 	
 	protected String		semester;
 	protected List<Stream>	streams	= new ArrayList<>();

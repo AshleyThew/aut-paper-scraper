@@ -4,10 +4,11 @@
 
 package com.ashleythew.aut.paper.data;
 
-import javax.swing.*;
 import java.util.List;
 
-public class Level {
+import javax.swing.*;
+
+public class Level{
 	
 	protected String		level;
 	protected List<Paper>	papers;

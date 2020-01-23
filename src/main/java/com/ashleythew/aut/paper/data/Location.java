@@ -4,6 +4,6 @@
 
 package com.ashleythew.aut.paper.data;
 
-public enum Location {
+public enum Location{
 	CITY, SOUTH, BOTH;
 }

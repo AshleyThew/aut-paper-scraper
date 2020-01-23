@@ -4,16 +4,17 @@
 
 package com.ashleythew.aut.paper.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.*;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Specialisation {
+public class Specialisation{
 	
 	protected String		name, url;
 	protected List<Course>	courses;

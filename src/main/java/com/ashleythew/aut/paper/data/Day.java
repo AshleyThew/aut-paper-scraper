@@ -4,7 +4,7 @@
 
 package com.ashleythew.aut.paper.data;
 
-public enum Day {
+public enum Day{
 	MON("Monday"), TUE("Tuesday"), WED("Wednesday"), THU("Thursday"), FRI("Friday");
 	
 	String name;

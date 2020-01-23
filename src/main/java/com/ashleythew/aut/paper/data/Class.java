@@ -4,7 +4,7 @@
 
 package com.ashleythew.aut.paper.data;
 
-public class Class {
+public class Class{
 	
 	private String	code, room;
 	private int		day, start, end;

@@ -4,15 +4,15 @@
 
 package com.ashleythew.aut.paper.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Paper {
+public class Paper{
 	
 	private String				code, name, url;
 	protected List<Semester>	semesters;

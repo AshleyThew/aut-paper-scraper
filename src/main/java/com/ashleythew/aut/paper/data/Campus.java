@@ -4,7 +4,7 @@
 
 package com.ashleythew.aut.paper.data;
 
-public enum Campus {
+public enum Campus{
 	City("W"), North("A"), South("M");
 	
 	protected String code;

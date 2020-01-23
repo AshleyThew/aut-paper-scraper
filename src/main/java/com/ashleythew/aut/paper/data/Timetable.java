@@ -7,18 +7,18 @@ package com.ashleythew.aut.paper.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Timetable {
+public class Timetable{
 	
 	private List<Class> classes = new ArrayList<Class>();
-
+	
 	public Timetable(){
-
+		
 	}
-
+	
 	public List<Class> getClasses(){
 		return classes;
 	}
-
+	
 	public boolean tryAdd(Stream s){
 		for(Class c : classes){
 			for(Class c1 : s.getClasses()){
@@ -28,7 +28,7 @@ public class Timetable {
 		classes.addAll(s.getClasses());
 		return true;
 	}
-
+	
 	public List<String> getUnique(){
 		List<String> list = new ArrayList<String>();
 		for(Class c : classes){
@@ -38,20 +38,20 @@ public class Timetable {
 		}
 		return list;
 	}
-
+	
 	public Timetable clone(){
 		Timetable tt = new Timetable();
 		tt.classes.addAll(classes);
 		return tt;
 	}
-
+	
 	public boolean hasClass(String code){
 		for(Class clas : classes){
 			if(clas.getCode().equals(code)){ return true; }
 		}
 		return false;
 	}
-
+	
 	public String[][] generateData(){
 		int low = getLowestHour();
 		int high = getMaxHour();
@@ -88,7 +88,7 @@ public class Timetable {
 		}
 		return data;
 	}
-
+	
 	// Method to get the lowest hour from a timetable
 	public int getLowestHour(){
 		// Init low to highest number
@@ -100,7 +100,7 @@ public class Timetable {
 		}
 		return low;
 	}
-
+	
 	// Method to get the highest hour from a timetable
 	public int getMaxHour(){
 		// Init max to lowest number
