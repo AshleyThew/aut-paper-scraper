@@ -16,8 +16,8 @@ import org.jsoup.select.Elements;
 
 public class Specialisation{
 	
-	protected String		name, url;
-	protected List<Course>	courses;
+	protected String				code, name, url;
+	protected List<Qualification>	qualifications;
 	
 	public Specialisation(String name, String url){
 		this.name = name;
@@ -37,17 +37,18 @@ public class Specialisation{
 	}
 	
 	public void populateQualifications(JComboBox box){
-		if(courses != null){
+		if(qualifications != null){
 			populate(box);
 		}else{
-			loadCourses();
+			loadQualifications();
 		}
 	}
 	
-	public void loadCourses(){
-		courses = new ArrayList<>();
+	public List<Qualification> loadQualifications(){
+		if(qualifications != null){ return qualifications; }
+		qualifications = new ArrayList<>();
 		try{
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url).execute().bufferUp().parse();
 			Elements trs = doc.getElementsByClass("BackgroundLight");
 			for(Element tr : trs){
 				Element tbody = tr.getElementsByTag("tbody").get(1);
@@ -57,18 +58,19 @@ public class Specialisation{
 				String name = a.text();
 				String url = "https://arion.aut.ac.nz/ArionMain/CourseInfo/Information/Qualifications/" + a.attr("href");
 				String code = a.parent().text().trim().substring(name.length() + 1);
-				Course course = new Course(code, name, url);
-				courses.add(course);
+				Qualification course = new Qualification(code, name, url);
+				qualifications.add(course);
 				System.out.println("Found: " + course.toString());
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		return qualifications;
 	}
 	
 	protected void populate(JComboBox box){
 		box.removeAllItems();
-		for(Course c : courses){
+		for(Qualification c : qualifications){
 			box.addItem(c);
 		}
 	}

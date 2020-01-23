@@ -16,5 +16,5 @@ dependencies {
     // jsoup HTML parser library @ https://jsoup.org/
     implementation 'org.jsoup:jsoup:1.12.1'
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
 }

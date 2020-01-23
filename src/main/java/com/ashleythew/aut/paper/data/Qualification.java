@@ -14,12 +14,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Course{
+public class Qualification{
 	
 	protected String		code, name, url;
 	protected List<Level>	levels;
 	
-	public Course(String code, String name, String url){
+	public Qualification(String code, String name, String url){
 		this.code = code;
 		this.name = name;
 		this.url = url;
@@ -41,21 +41,15 @@ public class Course{
 		return code + " - " + name;
 	}
 	
-	public void populateLevel(JComboBox box){
-		if(levels != null){
-			populate(box);
-		}else{
-			loadCourses();
+	public List<Level> loadLevels(){
+		if(levels != null){ return levels;
 		}
-	}
-	
-	public void loadCourses(){
 		levels = new ArrayList<>();
 		try{
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url).execute().bufferUp().parse();
 			Elements trs = doc.getElementsByClass("BackgroundLight");
 			String url = "https://arion.aut.ac.nz/ArionMain/CourseInfo/Information/Qualifications/" + trs.get(2).getElementsByTag("a").get(0).attr("href").substring(3);
-			doc = Jsoup.connect(url).get();
+			doc = Jsoup.connect(url).execute().bufferUp().parse();
 			Elements e = doc.getElementsByClass("TextHeading");
 			// For each heading
 			for(Element e1 : e){
@@ -93,8 +87,10 @@ public class Course{
 				}
 			}
 		}catch(Exception e){
+			System.out.println("Error with " + url);
 			e.printStackTrace();
 		}
+		return levels;
 	}
 	
 	protected void populate(JComboBox box){

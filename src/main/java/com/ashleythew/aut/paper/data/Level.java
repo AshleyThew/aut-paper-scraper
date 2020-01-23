@@ -6,8 +6,6 @@ package com.ashleythew.aut.paper.data;
 
 import java.util.List;
 
-import javax.swing.*;
-
 public class Level{
 	
 	protected String		level;
@@ -28,12 +26,5 @@ public class Level{
 	
 	public String toString(){
 		return level;
-	}
-	
-	public void populate(JComboBox box){
-		box.removeAllItems();
-		for(Paper p : papers){
-			box.addItem(p);
-		}
 	}
 }

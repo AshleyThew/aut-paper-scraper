@@ -11,7 +11,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.ashleythew.aut.paper.data.Specialisation;
+import com.ashleythew.aut.paper.data.*;
+import com.ashleythew.aut.paper.data.Class;
+import com.ashleythew.aut.paper.database.mysql.MySQLDatabase;
+import com.ashleythew.aut.paper.database.mysql.MySQLProperties;
+import com.ashleythew.aut.paper.scraper.database.*;
 
 public class PaperScraper{
 	
@@ -19,6 +23,74 @@ public class PaperScraper{
 		PaperScraper scraper = new PaperScraper();
 		scraper.saveResource(new File("."), "mysql.properties", false);
 		scraper.loadSpecialisations();
+		
+		/// TODO
+		
+		scraper.getSpecialisations().forEach(scraper::work);
+		
+		scraper.closeDatabase();
+	}
+	
+	private void work(Specialisation specialisation){
+		specialisation.loadQualifications().forEach(this::work);
+	}
+	
+	private void work(Qualification qualification){
+		int qualificationID = QualificationDatabase.getInstance().addQualification(qualification);
+		if(qualificationID == -1){ return; }
+		System.out.println("Qualification " + qualificationID + ": " + qualification);
+		try{
+			Thread.sleep(0);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		qualification.loadLevels().forEach(level -> work(qualificationID, level));
+	}
+	
+	private void work(int qualification, Level level){
+		level.getPapers().forEach(p -> work(qualification, p));
+	}
+	
+	private void work(int qualification, Paper paper){
+		try{
+			Thread.sleep(0);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		int paperID = PaperDatabase.getInstance().addPaper(qualification, paper);
+		paper.getSemesters().forEach(s -> work(paperID, s));
+		System.out.println("Paper " + paperID + ": " + paper);
+	}
+	
+	private void work(int paper, Semester semester){
+		int semesterID = SemesterDatabase.getInstance().addSemester(semester);
+		semester.getStreams().forEach(s -> work(paper, semesterID, s));
+	}
+	
+	private void work(int paperID, int semesterID, Stream stream){
+		int streamID = StreamDatabase.getInstance().addStream(paperID, semesterID, stream);
+		ClassDatabase.getInstance().addClasses(streamID, stream);
+		stream.getClasses().forEach(c -> work(streamID, c));
+	}
+	
+	private void work(int streamID, Class clazz){
+		
+	}
+	
+	private MySQLDatabase database;
+	
+	private PaperScraper(){
+		MySQLProperties properties = new MySQLProperties(new File(".", "mysql.properties"));
+		database = new MySQLDatabase(properties, true);
+		database.addListener(PaperDatabase.getInstance());
+		database.addListener(QualificationDatabase.getInstance());
+		database.addListener(SemesterDatabase.getInstance());
+		database.addListener(StreamDatabase.getInstance());
+		database.addListener(ClassDatabase.getInstance());
+	}
+	
+	private void closeDatabase(){
+		database.closeConnection();
 	}
 	
 	protected List<Specialisation> specialisations = new ArrayList<Specialisation>();
@@ -30,13 +102,13 @@ public class PaperScraper{
 	protected void loadSpecialisations(){
 		try{
 			// Get data from url
-			Document doc = Jsoup.connect("https://arion.aut.ac.nz/ArionMain/CourseInfo/Information/Qualifications/Subjects.aspx").get();
+			Document doc = Jsoup.connect("https://arion.aut.ac.nz/ArionMain/CourseInfo/Information/Qualifications/Subjects.aspx").execute().bufferUp().parse();
 			Elements navigations = doc.getElementsByClass("Navigation");
 			for(Element navigation : navigations){
-				String specialisation = navigation.text();
+				String Qualification = navigation.text();
 				String url = "https://arion.aut.ac.nz/ArionMain/CourseInfo/Information/Qualifications/" + navigation.attr("href");
-				System.out.println("Found: " + specialisation);
-				specialisations.add(new Specialisation(specialisation, url));
+				System.out.println("Found: " + Qualification);
+				specialisations.add(new Specialisation(Qualification, url));
 			}
 		}catch(Exception e){
 			e.printStackTrace();

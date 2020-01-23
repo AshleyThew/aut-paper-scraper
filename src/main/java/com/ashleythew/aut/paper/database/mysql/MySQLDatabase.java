@@ -15,8 +15,8 @@ public class MySQLDatabase extends Database{
 	
 	private List<SQLListener>	listeners	= new ArrayList<SQLListener>();
 	
-	public MySQLDatabase(boolean open){
-		// mysql = config.getMySQL();
+	public MySQLDatabase(MySQLProperties properties, boolean open){
+		mysql = properties.getDbInfo();
 		if(open){
 			openConnection();
 		}

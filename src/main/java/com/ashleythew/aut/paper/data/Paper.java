@@ -56,7 +56,7 @@ public class Paper{
 		// Gets all possible semesters and timetable element from url
 		try{
 			// Get data from url
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url).execute().bufferUp().parse();
 			// Find Timetable element and go up a few elements
 			Element tbody = doc.getElementsByAttributeValue("name", "#Timetable").first().parent().parent().parent();
 			// Get the table for the timetables
@@ -77,6 +77,8 @@ public class Paper{
 						Element tr_p = e1.parent();
 						// Gets semester from spans
 						String name = spans.get(0).text() + ", " + spans.get(1).text();
+						// Fix some semesters
+						name = name.replace("Other ", "").replace("Jan/Mar", "");
 						// Gets index of parent element
 						int index = trs.indexOf(tr_p) + 1;
 						// This is the classes element
@@ -97,16 +99,20 @@ public class Paper{
 								// If stream name not empty
 								if(stream.length() > 1){
 									// If current Stream isnt null
-									if(s != null){
+									if(s != null && s.getCampus() != null){
 										// Add to list
 										semester.getStreams().add(s);
-										System.out.println(s);
+										// System.out.println(s);
 									}
 									// New Stream
 									s = new Stream(stream);
 								}
 								// Day of class
-								int day = Day.valueOf(tds.get(4).text().substring(0, 3)).ordinal() + 1;
+								String dayText = tds.get(4).text();
+								if(dayText.length() != 3){
+									continue;
+								}
+								int day = Day.valueOf(dayText.substring(0, 3)).ordinal() + 1;
 								// Get time for class
 								String time = tds.get(5).text();
 								// Split to get start and end times
@@ -133,16 +139,22 @@ public class Paper{
 							}
 						}
 						// If Stream isnt null
-						if(s != null){
+						if(s != null && s.getCampus() != null){
 							semester.getStreams().add(s);
-							System.out.println(s);
+							// System.out.println(s);
 						}
 						semesters.add(semester);
 					}
 				}
 			}
 		}catch(Exception e){
+			System.out.println(url);
 			e.printStackTrace();
+			try{
+				Thread.sleep(5000);
+			}catch(InterruptedException e1){
+				e1.printStackTrace();
+			}
 		}
 		return semesters;
 	}

@@ -11,7 +11,11 @@ public class MySQLProperties{
 	private MySQL dbInfo;
 	
 	public MySQLProperties(File file){
-		dbInfo = loadDBInfo(file);
+		this.dbInfo = loadDBInfo(file);
+	}
+	
+	public MySQL getDbInfo(){
+		return dbInfo;
 	}
 	
 	private MySQL loadDBInfo(File file){
@@ -29,7 +33,7 @@ public class MySQLProperties{
 	
 	private Properties readProperties(File file){
 		Properties properties = new Properties();
-		readProperties(file);
+		readProperties(properties, file);
 		return properties;
 	}
 	
