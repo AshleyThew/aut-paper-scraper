@@ -18,7 +18,7 @@ public class PaperScraper{
 	public static void main(String[] args){
 		PaperScraper scraper = new PaperScraper();
 		scraper.saveResource(new File("."), "mysql.properties", false);
-		scraper.loadSpecialistions();
+		scraper.loadSpecialisations();
 	}
 	
 	protected List<Specialisation> specialisations = new ArrayList<Specialisation>();
@@ -27,7 +27,7 @@ public class PaperScraper{
 		return specialisations;
 	}
 	
-	protected void loadSpecialistions(){
+	protected void loadSpecialisations(){
 		try{
 			// Get data from url
 			Document doc = Jsoup.connect("https://arion.aut.ac.nz/ArionMain/CourseInfo/Information/Qualifications/Subjects.aspx").get();
