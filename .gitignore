@@ -4,3 +4,4 @@ gradlew.bat
 .idea/
 build/
 gradle/
+src/main/resources/mysql.properties
